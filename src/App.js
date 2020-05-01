@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from "react";
 import './App.css';
+import KeyPad from "./components/KeyPad";
+import Output from "./components/Output";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  state = {
+    result: ''
+  }
+
+  buttonPressed = (buttonName) => {
+    if(buttonName === '=') {
+      this.calculate();
+    } else if (buttonName === 'C') {
+      this.reset()
+    } else if (buttonName === 'CE') {
+      this.backspace();
+    } else 
+    this.setState({
+      result: this.state.result + buttonName
+    });
+  };
+
+  backspace = () => {
+    this.setState({
+      result: this.state.result.slice(0, -1)
+    })
+  };
+
+  reset = () => {
+    this.setState ({
+      result: ""
+    });
+  };
+
+  calculate = () => {
+    this.setState({
+      result: eval(this.state.result)
+    });
+  };
+
+  render() {
+   return (
+      <div className="App">
+        <div className="calc-screen">
+        <Output result={this.state.result}/>
+          <KeyPad buttonPressed={this.buttonPressed}/>
+        </div>
+      </div>
+    );
+  } 
+} 
+
 
 export default App;
